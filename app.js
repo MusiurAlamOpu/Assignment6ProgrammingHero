@@ -38,12 +38,12 @@ const getImages = (query) => {
     .then(data => {
       if(data.hits.length == 0){
         errorDiv.classList.remove('d-none');
+        
+        spinnerToggler.classList.add('d-none');
         gallery.innerHTML = '';
       }else{
         showImages(data.hits);
         errorDiv.classList.add('d-none');
-        spinnerToggler.classList.add('d-none');
-
       }
     })
     .catch(err => console.log(err))
