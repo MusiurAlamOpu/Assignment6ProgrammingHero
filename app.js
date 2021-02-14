@@ -11,7 +11,7 @@ let sliders = [];
 // If this key doesn't work
 // Find the name in the url and go to their website
 // to create your own api key
-const KEY = '15674931-a9d714b6e9d654524df198e00&q';
+const KEY = '20268892-83605c8caa81e444d080e9c30';
 
 // show images 
 const showImages = (images) => {
@@ -22,16 +22,16 @@ const showImages = (images) => {
   images.forEach(image => {
     let div = document.createElement('div');
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
-    div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
+    div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;//webformatURL -> id
     gallery.appendChild(div)
   })
 
 }
 
 const getImages = (query) => {
-  fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
+  fetch(`https://pixabay.com/api/?key=${KEY}&q=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
-    .then(data => showImages(data.hitS))
+    .then(data => showImages(data.hits))
     .catch(err => console.log(err))
 }
 
@@ -41,13 +41,13 @@ const selectItem = (event, img) => {
   element.classList.add('added');
  
   let item = sliders.indexOf(img);
-  if (item === -1) {
+  if (item == -1) {
     sliders.push(img);
-  } else {
-    alert('Hey, Already added !')
+  }else{
+    element.classList.toggle('removed');
   }
 }
-var timer
+let timer; // var timer
 const createSlider = () => {
   // check slider image length
   if (sliders.length < 2) {
@@ -67,16 +67,16 @@ const createSlider = () => {
   document.querySelector('.main').style.display = 'block';
   // hide image aria
   imagesArea.style.display = 'none';
-  const duration = document.getElementById('duration').value || 1000;
+  const duration = document.getElementById("duration").value * 1000;
   sliders.forEach(slide => {
-    let item = document.createElement('div')
+    let item = document.createElement('div');
     item.className = "slider-item";
     item.innerHTML = `<img class="w-100"
     src="${slide}"
     alt="">`;
     sliderContainer.appendChild(item)
   })
-  changeSlide(0)
+  changeSlide(5);
   timer = setInterval(function () {
     slideIndex++;
     changeSlide(slideIndex);
@@ -118,5 +118,5 @@ searchBtn.addEventListener('click', function () {
 })
 
 sliderBtn.addEventListener('click', function () {
-  createSlider()
+  createSlider();
 })
