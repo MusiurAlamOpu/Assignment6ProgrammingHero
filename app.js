@@ -5,6 +5,7 @@ const searchBtn = document.getElementById('search-btn');
 const sliderBtn = document.getElementById('create-slider');
 const sliderContainer = document.getElementById('sliders');
 const spinnerToggler = document.getElementById("spinnerToggle");
+const errorDiv = document.getElementById('error-message');
 // selected image 
 let sliders = [];
 
@@ -23,7 +24,7 @@ const showImages = (images) => {
   images.forEach(image => {
     let div = document.createElement('div');
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
-    div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;//webformatURL -> id
+    div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
     gallery.appendChild(div)
   })
   spinnerToggle();
@@ -33,7 +34,18 @@ const getImages = (query) => {
   
   fetch(`https://pixabay.com/api/?key=${KEY}&q=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
-    .then(data => showImages(data.hits))
+    // .then(data => showImages(data.hits))
+    .then(data => {
+      if(data.hits.length == 0){
+        errorDiv.classList.remove('d-none');
+        gallery.innerHTML = '';
+      }else{
+        showImages(data.hits);
+        errorDiv.classList.add('d-none');
+        spinnerToggler.classList.add('d-none');
+
+      }
+    })
     .catch(err => console.log(err))
 }
 
@@ -74,7 +86,7 @@ const createSlider = () => {
   imagesArea.style.display = 'none';
   ////////task: 4 => handling negetive input value
   const duration = Math.abs(document.getElementById("duration").value * 1000 || 1000);
-  
+  /////
   
   sliders.forEach(slide => {
     let item = document.createElement('div');
